@@ -28,7 +28,7 @@ npm install
 npm run dev
 ```
 
-ブラウザで [http://localhost:3000](http://localhost:3000) を開き、トップページ（`/`）と支出一覧ページ（`/pages/index.tsx`）を確認してください。
+ブラウザで [http://localhost:3000](http://localhost:3000) を開き、トップページ（`/`）に表示される支出一覧とフォームを確認してください。
 
 ## プロジェクト構成
 
@@ -45,8 +45,6 @@ npm run dev
 ├── next-env.d.ts
 ├── next.config.js
 ├── package.json
-├── pages
-│   └── index.tsx
 ├── postcss.config.js
 ├── tailwind.config.js
 ├── tsconfig.json

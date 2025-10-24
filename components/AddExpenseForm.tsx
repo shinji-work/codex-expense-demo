@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo, useState } from 'react';
 import type { ChangeEvent, FormEvent, ReactElement } from 'react';
 import { inputClass, labelClass, primaryButtonClass, cardClass } from './sharedStyles';
