@@ -1,44 +1,36 @@
 # Codex Expense Demo
 
-このリポジトリは支出・家計簿トラッカーのNext.jsプロジェクトです。セットアップ手順を記載してください。
+Codex Expense Demo は、Next.js・TypeScript・Tailwind CSS を用いて構築した家計簿管理アプリケーションのデモプロジェクトです。支出の一覧表示や追加フォームを備えたベース実装を提供し、将来的なダッシュボードや分析機能の拡張に利用できます。
 
-## プロジェクトの目的
+## 主な機能
 
-このプロジェクトは、Next.js・TypeScript・Tailwind CSS を用いたモダンな家計簿管理アプリケーションのベース環境です。支出の記録、カテゴリ別の分析、家族との共有など、家計管理に必要な機能を柔軟に拡張できるよう設計されています。
+- 支出一覧と追加フォームの初期画面を実装
+- ダミーデータ（日時／カテゴリ／金額／メモ）の表示
+- フォームから追加した支出をローカルストレージに保存し、ページリロード後も保持
+- Tailwind CSS によるレスポンシブな UI レイアウト
 
-## 必要条件
+## セットアップ手順
+
+### 1. 必要条件
 
 - Node.js 18 以上
 - npm 9 以上（または互換のパッケージマネージャー）
 
-## セットアップ手順
+### 2. 依存関係のインストール
 
-1. 依存関係をインストールします。
-   ```bash
-   npm install
-   ```
-2. 開発サーバーを起動します。
-   ```bash
-   npm run dev
-   ```
-3. ブラウザで [http://localhost:3000](http://localhost:3000) を開くと、トップページを確認できます。
+```bash
+npm install
+```
 
-## npm スクリプト
+### 3. 開発サーバーの起動
 
-- `npm run dev` : 開発サーバーを起動します。
-- `npm run build` : 本番ビルドを作成します。
-- `npm run start` : ビルド済みアプリケーションを起動します。
-- `npm run lint` : ESLint でコード品質をチェックします。
-- `npm run format` : Prettier でコードの整形を確認します。
-- `npm run format:write` : Prettier でコードを自動整形します。
+```bash
+npm run dev
+```
 
-## 開発ガイド
+ブラウザで [http://localhost:3000](http://localhost:3000) を開き、トップページ（`/`）と支出一覧ページ（`/pages/index.tsx`）を確認してください。
 
-- Tailwind CSS を利用してスタイルを定義しています。`app/globals.css` に共通スタイルを追加してください。
-- すべてのコンポーネントや関数には、JSDoc 形式の日本語ドキュメンテーションコメントを追加してください。
-- ESLint と Prettier の設定を変更する場合は、チームに共有のうえ `.eslintrc.js` と `.prettierrc.json` を更新してください。
-
-## ディレクトリ構成
+## プロジェクト構成
 
 ```
 .
@@ -46,13 +38,35 @@
 │   ├── globals.css
 │   ├── layout.tsx
 │   └── page.tsx
+├── components
+│   ├── AddExpenseForm.tsx
+│   ├── ExpenseList.tsx
+│   └── sharedStyles.ts
+├── next-env.d.ts
 ├── next.config.js
 ├── package.json
+├── pages
+│   └── index.tsx
 ├── postcss.config.js
 ├── tailwind.config.js
 ├── tsconfig.json
 └── README.md
 ```
+
+## npm スクリプト
+
+- `npm run dev` : 開発サーバーを起動します。
+- `npm run build` : 本番ビルドを作成します。
+- `npm run start` : ビルド済みアプリケーションを起動します。
+- `npm run lint` : ESLint でコード品質をチェックします。
+- `npm run format` : Prettier でコードスタイルを確認します。
+- `npm run format:write` : Prettier でコードを自動整形します。
+
+## 開発ガイドライン
+
+- すべての公開関数・コンポーネントには JSDoc 形式のドキュメンテーションコメントを記載します。
+- Tailwind CSS の共通クラスは `components/sharedStyles.ts` に定義し、コンポーネント間で再利用します。
+- 新たな機能を追加する際は、フォームのバリデーションやアクセシビリティも考慮してください。
 
 ## ライセンス
 
