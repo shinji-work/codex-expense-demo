@@ -22,13 +22,30 @@ Codex Expense Demo は、Next.js・TypeScript・Tailwind CSS を用いて構築�
 npm install
 ```
 
-### 3. 開発サーバーの起動
+### 3. 環境変数ファイルの作成
+
+プロジェクトルートにある `env.example` を `.env.local` にコピーし、必要に応じて値を更新します。
+
+```bash
+cp env.example .env.local
+```
+
+### 4. 開発サーバーの起動
 
 ```bash
 npm run dev
 ```
 
-ブラウザで [http://localhost:3000](http://localhost:3000) を開き、トップページ（`/`）に表示される支出一覧とフォームを確認してください。
+ブラウザで [http://localhost:5000](http://localhost:5000) を開き、トップページ（`/`）に表示される支出一覧とフォームを確認してください。
+
+## 環境変数
+
+`env.example` にはデータベース接続に必要なホスト名やポート、認証情報、そしてフロントエンドのドメインを指定する `NEXT_PUBLIC_WEB_DOMAIN` を含めています。プロジェクトの用途に合わせて値を更新し、`.env.local` などの環境変数ファイルで利用してください。
+
+- `DATABASE_HOST` / `DATABASE_PORT` : 接続先データベースのホスト名とポート番号です。
+- `DATABASE_USER` / `DATABASE_PASSWORD` : データベースへ接続する際に使用する認証情報です。
+- `DATABASE_NAME` : アプリケーションが利用するデータベース名です。
+- `NEXT_PUBLIC_WEB_DOMAIN` : フロントエンドの公開ドメインを指定します。ローカル開発では `http://localhost:5000` を設定してください。
 
 ## プロジェクト構成
 
@@ -53,9 +70,9 @@ npm run dev
 
 ## npm スクリプト
 
-- `npm run dev` : 開発サーバーを起動します。
+- `npm run dev` : 開発サーバーをポート 5000 で起動します。
 - `npm run build` : 本番ビルドを作成します。
-- `npm run start` : ビルド済みアプリケーションを起動します。
+- `npm run start` : ビルド済みアプリケーションをポート 5000 で起動します。
 - `npm run lint` : ESLint でコード品質をチェックします。
 - `npm run format` : Prettier でコードスタイルを確認します。
 - `npm run format:write` : Prettier でコードを自動整形します。
