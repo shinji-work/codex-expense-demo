@@ -1,28 +1,115 @@
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
 import type { ReactElement } from 'react';
+import AddExpenseForm, { type ExpenseDraft } from '../components/AddExpenseForm';
+import ExpenseList, { type Expense } from '../components/ExpenseList';
+
+const STORAGE_KEY = 'codex-expense-demo:expenses';
+
+const defaultExpenses: Expense[] = [
+  {
+    id: 'exp-001',
+    date: '2024-05-01',
+    category: '食費',
+    amount: 1200,
+    memo: 'ランチセット'
+  },
+  {
+    id: 'exp-002',
+    date: '2024-05-02',
+    category: '交通費',
+    amount: 500,
+    memo: '電車往復'
+  },
+  {
+    id: 'exp-003',
+    date: '2024-05-03',
+    category: '趣味・娯楽',
+    amount: 3200,
+    memo: '映画鑑賞'
+  }
+];
 
 /**
- * 家計簿トラッカーのトップページを表示し、アプリの概要と次の操作を案内します。
+ * ローカルストレージから支出情報を読み出します。利用できない場合はデフォルトの支出を返します。
  *
- * @returns {ReactElement} トップページのセクションを含むReact要素を返します。
+ * @returns {Expense[]} 保存済みの支出一覧、またはダミーデータを返します。
  */
-export default function Home(): ReactElement {
+function loadExpenses(): Expense[] {
+  if (typeof window === 'undefined') {
+    return defaultExpenses;
+  }
+
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    if (!stored) {
+      return defaultExpenses;
+    }
+
+    const parsed: Expense[] = JSON.parse(stored) as Expense[];
+    if (!Array.isArray(parsed) || parsed.some((expense) => expense == null)) {
+      return defaultExpenses;
+    }
+
+    return parsed;
+  } catch (error) {
+    console.error('支出データの読み込みに失敗しました。', error);
+    return defaultExpenses;
+  }
+}
+
+/**
+ * 支出一覧と追加フォームを統合したトップページを表示し、ローカルストレージと同期します。
+ *
+ * @returns {ReactElement} 支出一覧と追加フォームを含むReact要素を返します。
+ */
+export default function ExpenseDashboardPage(): ReactElement {
+  const [expenses, setExpenses] = useState<Expense[]>(() => loadExpenses());
+
+  useEffect(() => {
+    setExpenses(loadExpenses());
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(expenses));
+    } catch (error) {
+      console.error('支出データの保存に失敗しました。', error);
+    }
+  }, [expenses]);
+
+  const categories = useMemo(() => ['食費', '交通費', '日用品', '趣味・娯楽', '光熱費'], []);
+
+  /**
+   * 支出追加フォームから受け取った草案をID付きのレコードに変換し、状態へ追加します。
+   *
+   * @param {ExpenseDraft} draft - 追加された支出データの草案です。
+   */
+  const handleAddExpense = (draft: ExpenseDraft): void => {
+    setExpenses((prev) => [
+      {
+        id: `exp-${Date.now()}`,
+        ...draft
+      },
+      ...prev
+    ]);
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-slate-100 px-6 py-12">
-      <section className="w-full max-w-3xl rounded-2xl bg-white p-10 shadow-lg">
-        <h1 className="text-3xl font-bold text-slate-900">支出・家計簿トラッカーへようこそ</h1>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          このアプリケーションは、毎日の支出を記録し、家計の可視化をサポートするNext.jsプロジェクトです。
-          ナビゲーションやダッシュボード、レポート機能などを追加することで、家計管理の効率化を目指せます。
-        </p>
-        <div className="mt-6 rounded-lg bg-slate-50 p-6">
-          <h2 className="text-xl font-semibold text-slate-800">次のステップ</h2>
-          <ul className="mt-4 list-disc space-y-2 pl-6 text-slate-700">
-            <li>支出の登録フォームや履歴一覧ページを作成しましょう。</li>
-            <li>カテゴリ別の分析グラフや月次レポートを追加すると便利です。</li>
-            <li>家族と共有できるように認証・権限管理を組み込むことも検討してください。</li>
-          </ul>
+    <main className="min-h-screen bg-slate-100 px-4 py-8 sm:px-6 lg:px-12">
+      <div className="mx-auto flex max-w-5xl flex-col gap-8 sm:flex-row">
+        <div className="sm:w-2/5">
+          <AddExpenseForm categories={categories} onAddExpense={handleAddExpense} />
         </div>
-      </section>
+        <div className="sm:w-3/5">
+          <ExpenseList expenses={expenses} />
+        </div>
+      </div>
     </main>
   );
 }
